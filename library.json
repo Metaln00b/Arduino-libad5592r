@@ -1,0 +1,15 @@
+{
+  "name": "Arduino-libad5592r",
+  "keywords": "analog, dac, devices, ads, ad5592r, spi",
+  "description": "Enables controlling AD5592R by Analog Devices Inc.",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Metaln00b/Arduino-libad5592r.git"
+  },
+  "frameworks": "arduino",
+  "platforms":
+  [
+    "atmelavr"
+  ]
+}

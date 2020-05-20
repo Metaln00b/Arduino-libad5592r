@@ -8,30 +8,15 @@
 
 
 ad5592r_t *
-ad5592r_init(ad5592r_t *obj, uint8_t pinSS)
+ad5592r_init(ad5592r_t *obj)
 {
-    /*
-    // Old implementation. Not recommended anymore: https://www.arduino.cc/en/Reference/SPISetClockDivider
     SPI.begin();
     SPI.setDataMode(SPI_MODE1);
     SPI.setBitOrder(MSBFIRST);
     SPI.setClockDivider(SPI_CLOCK_DIV2);
-    */
 
     obj->supply_voltage_mV = 3300;         /* Voreingestellt Versorgungsspannung (Vdd) */
     obj->external_ref_voltage_mV = 3300;   /* Voreingestellte externe Referenzsspannung (Vref) */
-    obj->syncPin = pinSS;
-
-    SPI.begin();
-
-    #ifdef CORE_TEENSY
-        // Teensy can go faster. The DAC is comfy at 10 MHz
-        SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE1)); 
-        pinMode(obj->syncPin, OUTPUT);      // Worked on tempe Readin example!
-    #else
-        // Arduino boards can do slower SPI
-        SPI.beginTransaction(SPISettings(SPI_CLOCK_DIV2, MSBFIRST, SPI_MODE1));
-    #endif
 
     return obj;
 }
@@ -170,12 +155,7 @@ ad5592r_comm(ad5592r_t *obj __attribute__((unused)), ad5592r_word sixteen_bits, 
     uint8_t send[2];
     ad5592r_split_word(send, sixteen_bits, sizeof(send));
 
-    
-    #ifdef CORE_TEENSY
-        digitalWrite(obj->syncPin, LOW);
-    #else
-        digitalWrite(SS,LOW);
-    #endif
+    digitalWrite(SS, LOW);
 
     for (size_t i = 0; i < sizeof(send); i++)
     {
@@ -188,12 +168,8 @@ ad5592r_comm(ad5592r_t *obj __attribute__((unused)), ad5592r_word sixteen_bits, 
     Serial.println(rx_data[0], HEX);
     Serial.println(rx_data[1], HEX);
 #endif
+    digitalWrite(SS, HIGH);
 
-    #ifdef CORE_TEENSY
-        digitalWrite(obj->syncPin, HIGH);  //SS
-    #else
-        digitalWrite(SS,HIGH);
-    #endif
     return true;
 }
 

@@ -101,9 +101,6 @@ typedef struct {
     bool double_vref_adc;
     bool double_vref_dac;
 
-    // Added the option to set your own SS pin --> github.com/dzalf  On May 2020
-    uint8_t syncPin;
-
     ad5592r_ldac_mode_t ldac_mode;
 
     /* Spannung welche an Pin (Vdd) anliegt */
@@ -124,7 +121,7 @@ typedef struct {
  * Initialisierung von ad5592r-Objekt
  * @param obj: Zeiger auf Objekt
  */
-ad5592r_t *ad5592r_init(ad5592r_t *obj, uint8_t pin);
+ad5592r_t *ad5592r_init(ad5592r_t *obj);
 
 /**
  * Zurücksetzen

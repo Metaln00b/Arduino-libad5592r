@@ -7,14 +7,17 @@
 #define DEBUG       false
 
 
+#define AD5592R_SPI_CLOCK (4000000)
+
 ad5592r_t *
 ad5592r_init(ad5592r_t *obj)
 {
-    SPI.begin();
-    SPI.setDataMode(SPI_MODE1);
-    SPI.setBitOrder(MSBFIRST);
-    SPI.setClockDivider(SPI_CLOCK_DIV2);
+    pinMode(SS, OUTPUT);
+    digitalWrite(SS, LOW);
 
+    SPI.begin();
+    SPI.beginTransaction(SPISettings(AD5592R_SPI_CLOCK, MSBFIRST, SPI_MODE1)) ;
+  
     obj->supply_voltage_mV = 3300;         /* Voreingestellt Versorgungsspannung (Vdd) */
     obj->external_ref_voltage_mV = 3300;   /* Voreingestellte externe Referenzsspannung (Vref) */
 
